@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+    <style>
+        /* 父容器样式，例如 body 或者一个包含该 div 的容器 */
+        .parent-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .form input {
+            margin-top: 10px;
+        }
+
+        .submit {
+            width: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="parent-container">
+        <div class="centered">
+            <form class="form" action="/api/user/login" method="post">
+                账号：<input placeholder="请输入用户名" type="text" name="账号"><br />
+                密码：<input placeholder="请输入密码" type="password" name="密码"><br />
+                <br /><input class="submit" type="submit" value="登录">
+                <a href="./register.html">没有账号去注册</a>
+            </form>
+        </div>
+    </div>
+
+</body>
+
+</html>
