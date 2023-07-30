@@ -1,6 +1,6 @@
 //1.导入mysql模块
 const mysql = require('mysql');
-const MYSQL_CONFIG = require('../config/db');
+const {MYSQL_CONFIG} = require('../config/db');
 //2. 创建连接对象
 const connection = mysql.createConnection(MYSQL_CONFIG);
 //3. 连接mysql数据库

@@ -1,4 +1,5 @@
 let MYSQL_CONFIG;
+let REDIS_CONFIG;
 
 if (process.env.NODE_ENV === 'dev') {
     MYSQL_CONFIG = {
@@ -8,14 +9,24 @@ if (process.env.NODE_ENV === 'dev') {
         port: '3306',
         database: 'demo'
     }
+    REDIS_CONFIG = {
+        host: '127.0.0.1',
+        port: '6379'
+    }
 } else if (process.env.NODE_ENV === 'pro') {
     MYSQL_CONFIG = {
-        host: 'localhost',
-        user: 'XXXX',
-        password: 'XXXXXX',
+        host: '127.0.0.1',
+        user: 'root',
+        password: '123456',
         port: '3306',
-        database: 'myblog'
+        database: 'demo'
+    }
+    REDIS_CONFIG = {
+        host: '127.0.0.1',
+        port: '6379'
     }
 }
 
-module.exports = MYSQL_CONFIG;
+module.exports = {
+    MYSQL_CONFIG, REDIS_CONFIG
+};
