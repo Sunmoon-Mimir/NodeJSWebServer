@@ -38,24 +38,33 @@ cookie的特点
 3.将用户的唯一标识作为key，登录后给容器的key添加登录状态信息
 */
 
-const getCookieExpires = () => {
-    let date = new Date();
-    date.setTime(date.getDate() + (24 * 60 * 60 * 1000));
-    return date.toGMTString();
-}
+// const getCookieExpires = () => {
+//     let date = new Date();
+//     date.setTime(date.getDate() + (24 * 60 * 60 * 1000));
+//     return date.toGMTString();
+// }
 
 const userRouterHandle = async (req, res) => {
     if (req.method === 'POST' && req.path === USER_LOGIN) {
         let result = loginCheck(req.body);
+        if(result.code===200){
+            req.session.username = result.data.username;
+            req.session.password = result.data.password;
+            req.session.gender = result.data.gender;
+        }
 
         //在客户端保存登录状态，客户端cookie会存储它们
         /*cookie安全性：客户端服务端都可以修改，存在安全隐患，
         1. 设置httpOnly保证只允许在服务端修改
         2. 设置过期时间
         */
-        if (result.code === 200) {
-            res.setHeader('Set-Cookie', `username=${generateSalt(req.body.username)};path=/;httpOnly;expires=${getCookieExpires()}`);
-        }
+
+        /*
+        //客户端保存登录状态
+        // if (result.code === 200) {
+        //     res.setHeader('Set-Cookie', `username=${generateSalt(req.body.username)};path=/;httpOnly;expires=${getCookieExpires()}`);
+        // }
+        */
         /* 保存登录状态后由于serverHandle设置了writeHead
         writeHead必须在setHeader之后，否则报错
         此时需要单独封装res.end，再每次res.end之前writeHead
