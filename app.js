@@ -9,6 +9,7 @@ const userRouterHandle = require('./router/user');
 const path = require('path')
 const staticServer = require('./utils/staticServer');
 const rootPath = path.join(__dirname, 'public');
+const { redisGet } = require('./db/redis');
 /*1.当前服务端存储存在的问题
 -操作系统会给每一个应用程序分配一块存储空间
     +当前session是一个全局变量，全局变量使用的是当前应用程序分配到的存储空间
@@ -42,7 +43,7 @@ const getCookieExpires = () => {
     return date.toGMTString();
 }
 
-const initCookieSession = (req, res) => {
+const initCookieSession =async (req, res) => {
     //1.处理cookie
     req.cookie = {}
     // console.log(`cookie`, req.headers.cookie);
@@ -60,15 +61,20 @@ const initCookieSession = (req, res) => {
     if (!req.userId) {
         req.userId = `${Date.now()}_${Math.random()}_xmy`;
         //给当前用户分配容器（没有userid的情况下创建后，分配）
-        SESSION_CONTAINER[req.userId] = {};
+        // SESSION_CONTAINER[req.userId] = {};
+        req.session={};
         res.setHeader('Set-Cookie', `userId=${req.userId};path=/;httpOnly;expires=${getCookieExpires()}`);
     }
-    if (!SESSION_CONTAINER[req.userId]) {
-        //给当前用户分配容器，有userid没有容器的情况下分配
-        SESSION_CONTAINER[req.userId] = {}
+    // if (!SESSION_CONTAINER[req.userId]) {
+    //     //给当前用户分配容器，有userid没有容器的情况下分配
+    //     SESSION_CONTAINER[req.userId] = {}
+    // }
+    if(!req.session){
+        res.session=await redisGet(req.userId)||{};
     }
+    console.log(req.session);
     //3.将它挂进req上
-    req.session = SESSION_CONTAINER[req.userId];
+    // req.session = SESSION_CONTAINER[req.userId];
 }
 
 //准备各种请求参数
@@ -138,7 +144,7 @@ const serverHandle = async (req, res) => {
     //     'Content-Type': 'application/json;charset=utf-8;'
     // })
     //3.准备cookie和session
-    initCookieSession(req, res);
+    await initCookieSession(req, res);
 
     res.setEnd = setEnd;
     //1.准备各种请求参数

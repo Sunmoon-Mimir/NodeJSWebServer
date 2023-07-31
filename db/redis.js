@@ -1,8 +1,11 @@
 //1.导入Redis
-import { createClient } from 'redis';
+const redis = require('redis');
+
+// 在这里继续处理你的Redis操作
+
 const { REDIS_CONFIG } = require('../config/db');
 //2.建立Redis连接
-const client = createClient(REDIS_CONFIG.port, REDIS_CONFIG.host);
+const client = redis.createClient(REDIS_CONFIG.port, REDIS_CONFIG.host);
 
 client.on('error', err => console.log('Redis Client Error', err));
 

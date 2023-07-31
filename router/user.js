@@ -12,6 +12,7 @@ const exc = require('../db/mysql');
 const userSchema = require('../validator/userValidator');
 const { registerUser, loginCheck } = require('../controller/userController');
 const { generateSalt } = require('../utils/crypto');
+const { redisSet } = require('../db/redis');
 /*
 如何存储用户的登录状态？
 1.客户端存储 cookie
@@ -51,6 +52,8 @@ const userRouterHandle = async (req, res) => {
             req.session.username = result.data.username;
             req.session.password = result.data.password;
             req.session.gender = result.data.gender;
+            //同步到Redis中
+            redisSet(req.userId,req.session);
         }
 
         //在客户端保存登录状态，客户端cookie会存储它们
