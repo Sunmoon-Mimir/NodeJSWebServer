@@ -1,11 +1,13 @@
-const exc = require('../db/mysql');
+const { exc, escape } = require('../db/mysql');
 async function getUser(username, password) {
+    username = escape(username);
+    password = escape(password);
     if (password) {
-        let sql = `select * from user where username = '${username}' and password = '${password}'`;
+        let sql = `select * from user where username = ${username} and password = ${password}`;
         let result = await exc(sql);
         return result;
     } else {
-        let sql = `select * from user where username = '${username}'`;
+        let sql = `select * from user where username = ${username}`;
         let result = await exc(sql);
         return result;
     }
