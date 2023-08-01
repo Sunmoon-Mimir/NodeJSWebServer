@@ -52,11 +52,11 @@ async function loginCheck(data) {
     let passwordSalt = generateSalt(data.password);
     let result = await getUser(data.username, passwordSalt);
     console.log({ result });
-    if (result.length > 0) {
+    if (result) {
         let data = {
-            id: result[0].id,
-            username: result[0].username,
-            gender: result[0].gender
+            id: result.id,
+            username: result.username,
+            gender: result.gender,
         }
         return new SuccessModel({ code: 200, msg: '登录成功', data: data });
     } else {

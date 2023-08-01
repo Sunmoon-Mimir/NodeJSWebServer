@@ -14,23 +14,23 @@ const seq = require('../seq');
 */
 const User = seq.define('user', {
     id: {
-        type: Sequelize.inteage,
+        type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
     username: {
-        type: Sequelize.string,
+        type: Sequelize.STRING,
         primaryKey: false,
         unique: true
     },
     password: {
-        type: Sequelize.string,
+        type: Sequelize.STRING,
         allowNull: false,
         unique: false
     },
     gender: {
-        type: Sequelize.enum(['男', '女']),
-        defaultValue: '女'
+        type: Sequelize.STRING,
+        defaultValue: '1'
     }
 }, {
     freezeTableName: true,//告诉seq不需要自动将表名变成复数
@@ -50,11 +50,9 @@ seq.authenticate()
 seq.sync()
     .then(() => {
         console.log('表创建成功');
-        process.exit();
     })
     .catch(err => {
         console.error('表创建失败：', err);
-        process.exit(1)
     })
 
 
